@@ -35,5 +35,9 @@ A diferencia del ejercicio anterior, al cargar el módulo bosh, observamos que s
 
 **Ejercicio. Documentarse en https://prosody.im/doc/configure y registrar al menos dos usuarios.**
 
-       prosodyctl adduser sergio@ci40.xmppp.lucas.com
-       prosodyctl adduser lucas@ci40.xmppp.lucas.com
+       prosodyctl adduser sergio@ci40.xmpp.lucas.com
+       prosodyctl adduser lucas@ci40.xmpp.lucas.com
+
+**Ejercicio.  Arrancar profanity en un par de terminales, enviar mensajes y capturarlos y estudiarlos por medio de wireshark**
+
+
