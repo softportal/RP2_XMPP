@@ -42,7 +42,7 @@ A diferencia del ejercicio anterior, al cargar el módulo bosh, observamos que s
 
 El [siguiente enlace](https://github.com/softportal/Bin/blob/master/xmpp.out) es a la salida obtenida con la herramienta *tcpdump*.
 
-Hemos accedido a un servidor XMPP en la ci40 (IP 192.168.1.91) desde dos clientes en la máquina virtual (192.168.1.1). El protocolo XMPP funciona sobre TCP, requiere de un establecimiento de sesión y las tramas se confirman a nivel de transporte. Aplicando el filtro *tcp.flags.syn==1* observamos las de sesiones TCP que hemos establecido, desde cada uno de los clientes al servidor.
+Hemos accedido a un servidor XMPP en la ci40 (IP 192.168.1.91) desde dos clientes en la máquina virtual (192.168.1.1). El protocolo [XMPP](https://tools.ietf.org/html/rfc6120) funciona sobre TCP, requiere de un establecimiento de sesión y las tramas se confirman a nivel de transporte. Aplicando el filtro *tcp.flags.syn==1* observamos las de sesiones TCP que hemos establecido, desde cada uno de los clientes al servidor.
 
 Empezamos el estudio del protocolo XMPP a partir del paquete 105 del archivo que enlazamos. Analizamos el contenido de las cabeceras y datos de aplicación de las tramas XMPP ignorando sus correspondientes confirmaciones TCP.
 
@@ -94,6 +94,9 @@ A continuación (108), el cliente solicita una conexión XMPP enviando un paquet
     XMPP Protocol
         CHALLENGE [xmlns="urn:ietf:params:xml:ns:xmpp-sasl"]
             [Expert Info (Chat/Response): CHALLENGE]
+                [CHALLENGE]
+                [Severity level: Chat]
+                [Group: Response]
             xmlns: urn:ietf:params:xml:ns:xmpp-sasl
             CDATA: cj0yOElFQUFBQUFBQWJsU1ZhQUFBQUFBPT0xM2NjMmI0YS1lMzY3LTRhNjAtYjY4Ni05MTU0YWVhOGI3NjQscz1ZV1EzTm1FMFpXUXRaVEZqTkMwME9HVXlMV0ptTTJNdFptVXlPVE15WkROaU5UYzQsaT00MDk2
 
