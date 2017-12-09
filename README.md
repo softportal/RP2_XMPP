@@ -219,6 +219,8 @@ Cuando el servidor genera un recurso XMPP para el cliente, le envía un *IQ Stan
         
 Una vez el cliente y el servidor han terminado la negociación *stream*, cualquiera de las partes puede enviar *XML stanzas*.
 
+El cliente enva un *IQ Stanza* de tipo *set* para establecer un nuevo valor con el *id* \_xmpp_session1.
+
 (122) Cliente a servidor:
 
     XMPP Protocol
@@ -229,6 +231,8 @@ Una vez el cliente y el servidor han terminado la negociación *stream*, cualqui
                 xmlns: urn:ietf:params:xml:ns:xmpp-session
         [Response In: 123]
 
+El servidor responde a la petición con un *IQ Stanza* de tipo *result* con el mismo *id*.
+
 (123) Servidor a cliente:
 
     XMPP Protocol
@@ -237,6 +241,8 @@ Una vez el cliente y el servidor han terminado la negociación *stream*, cualqui
             type: result
             to: sergio@ci40.xmpp.sergio.com/profanity
         [Request In: 122]
+
+El cliente hace una petición *IQ Stanza* de tipo *get* solicitando información, con el *id* rooster.
 
 (124) Cliente a servidor:
 
@@ -247,6 +253,8 @@ Una vez el cliente y el servidor han terminado la negociación *stream*, cualqui
             QUERY [xmlns="jabber:iq:roster"]
                 xmlns: jabber:iq:roster
         [Response In: 125]
+
+El servidor responde a la petición con el mismo *id* y la información solicitada.
 
 (125) Servidor a cliente:
 
@@ -259,8 +267,10 @@ Una vez el cliente y el servidor han terminado la negociación *stream*, cualqui
                 xmlns: jabber:iq:roster
                 ver: 1
         [Request In: 124]
+        
 
-(126) Cliente a servidor:
+
+(126) El cliente hace una petición *IQ Stanza* de tipo *get* solicitando información, con el *id* bookmark_init_request Cliente a servidor:
 
     XMPP Protocol
         IQ [id="bookmark_init_request" type="get"]
@@ -276,7 +286,7 @@ Una vez el cliente y el servidor han terminado la negociación *stream*, cualqui
                     [Group: Undecoded]
         [Response In: 127]
 
-(127) Servidor a cliente:
+(127) Respuesta *IQ Stanza* tipo *result* servidor a cliente, con el mismo *id*:
 
     XMPP Protocol
         IQ [id="bookmark_init_request" type="result" to="sergio@ci40.xmpp.sergio.com/profanity"]
@@ -293,6 +303,8 @@ Una vez el cliente y el servidor han terminado la negociación *stream*, cualqui
                     [Group: Undecoded]
         [Request In: 126]
 
+El cliente enva una *Presence Stanza* sin atributo *to* que el servidor redifunde a todas las entidades suscritas. 
+
 (128) Cliente a servidor:
 
     XMPP Protocol
@@ -304,6 +316,8 @@ Una vez el cliente y el servidor han terminado la negociación *stream*, cualqui
                 node: http://www.profanity.im
                 ver: jra5S1tICxzuMGVnu86Tv5flMBU=
                 
+En este punto la única entidad suscrita es el propio cliente.
+
 (129) Servidor a cliente:
 
     XMPP Protocol
@@ -319,9 +333,11 @@ Una vez el cliente y el servidor han terminado la negociación *stream*, cualqui
 
 **Nota:Hasta este punto del documento nos hemos referido como *cliente* al primero de los dos que hemos conectado desde la MV al servidor en la ci40**
 
-Los paquetes 180,182,184,186,187 y 189, corresponden a la conexión e identificación del segundo usuario, y su contenido es análgo a los 108,110,112,114,115 y 117 respectivamente, que hemos explicado para el primer usuario. El puerto TCP que asigna la máquina virtual a este segundo cliente (60556) para esta conexión difiere del asignado al primero (60554).
+Los paquetes 180,182,184,186,187,189,190,191,192 y 193 corresponden a la conexión,identificación y vinculación del segundo usuario, y su contenido es análgo a los 108,110,112,114,115,117,118,119,120 y 121 respectivamente, que hemos explicado para el primero. El puerto TCP que asigna la máquina virtual a este segundo cliente (60556) para esta conexión difiere del asignado al primero (60554).
 
-**TO-DO: Estudiar y comprender paquetes en el rango \[118-129](cliente1) , probablemente los del rango \[190-201] correspodan a las mismas tramas para el cliente2**
+Los paquetes 200 y 201 corresponden a un *Presence Stanza* del cliente2 al servidor y la respuesta de éste.
+
+Los paquetes 288 y 289 corresponden a un *Message Stanza* enviado del cliente1 al cliente2 a través del servidor.
 
 (288) Cliente1 a servidor:
 
@@ -332,6 +348,7 @@ Los paquetes 180,182,184,186,187 y 189, corresponden a la conexión e identifica
             type: chat
             BODY [value="hola que tal estas"]
                 value: hola que tal estas
+                
 (289) Servidor a cliente2:
 
     XMPP Protocol
@@ -343,6 +360,8 @@ Los paquetes 180,182,184,186,187 y 189, corresponden a la conexión e identifica
             BODY [value="hola que tal estas"]
                 value: hola que tal estas
                 
+Los paquetes 410 y 412, correspondes a un *IQ Stanza* de tipo get desde el cliente1 con en *id* proof_ping_3 y a la rspuesta desde el servidor.
+
 (410) Cliente1 a servidor:
 
     XMPP Protocol
@@ -362,7 +381,9 @@ Los paquetes 180,182,184,186,187 y 189, corresponden a la conexión e identifica
             to: sergio@ci40.xmpp.sergio.com/profanity
         [Request In: 410]
         
-**TO-DO:Estudiar 410-412, parece que 461-462; 673-674 ;720-721 ;  938-939 ; 974-975 ; 1198-1200 ; 1250-1251 ; 1468-1470 ; 1739-1741 son get-results con la misma relación**
+Los paquetes 461-462; 673-674 ;720-721 ;  938-939 ; 974-975 ; 1198-1200 ; 1250-1251 ; 1468-1470 ; 1739-1741 son *IQ Stanzas* con la misma similares.
+
+Los paquetes XMPP en el rango \[943-1386], enumerados a continuación corresponden a envíos al servidor desde alguno de los dos clientes y redifusiones de dicho envío al otro cliente de *Message Stanzas*.
 
 (943) Cliente1 a servidor:
 
@@ -460,6 +481,8 @@ Los paquetes 180,182,184,186,187 y 189, corresponden a la conexión e identifica
             BODY [value="fenomeno"]
                 value: fenomeno
 
+A continuación cerramos el stream desde uno de los clientes para entender como trata el protocolo los mensajes perdidos.
+
 (1713) Cierre de *stream* cliente2 a servidor:
 
     XMPP Protocol
@@ -497,8 +520,6 @@ Pero este ha cerrado su *stream* por lo que el servidor informa al cliente1 (174
                     [Group: Response]
 
 Abrimos de nuevo el *stream* del cliente2 (1821,1823,1825,1827,1828 y 1830). 
-
-**TO-DO: confirmar si \[1831-1842] corresponden a los \[118-129]**
 
 (1872) Enviamos un nuevo paquete del cliente1 al servidor:
 
