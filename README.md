@@ -81,7 +81,7 @@ A continuación (108), el cliente solicita una conexión XMPP enviando un paquet
                 MECHANISMS [xmlns="urn:ietf:params:xml:ns:xmpp-sasl"]
                 [Expert Info (Note/Undecoded): Unknown element: features]
 
-(112) El cliente solicita identificarse y envía su nombre de ususario:
+(112) El cliente envía una **solicitud de conexión SASL** *certificada*(traducido del inglés *qualified*) con el *namespace*, incluyendo un valor válido para el parámetro mecanismo y la *initial response* en términos SASL en el *XML character data*:
 
     XMPP Protocol
         AUTH [xmlns="urn:ietf:params:xml:ns:xmpp-sasl" mechanism="SCRAM-SHA-1"]
@@ -89,7 +89,7 @@ A continuación (108), el cliente solicita una conexión XMPP enviando un paquet
             mechanism: SCRAM-SHA-1
             CDATA: biwsbj1zZXJnaW8scj0yOElFQUFBQUFBQWJsU1ZhQUFBQUFBPT0=
 
-(114) El servidor requiere la contraseña para ese usuario:
+(114) El servidor **prueba (challenges) al cliente** enviando una respuesta *certificada* con el *namespace* :
 
     XMPP Protocol
         CHALLENGE [xmlns="urn:ietf:params:xml:ns:xmpp-sasl"]
@@ -100,7 +100,7 @@ A continuación (108), el cliente solicita una conexión XMPP enviando un paquet
             xmlns: urn:ietf:params:xml:ns:xmpp-sasl
             CDATA: cj0yOElFQUFBQUFBQWJsU1ZhQUFBQUFBPT0xM2NjMmI0YS1lMzY3LTRhNjAtYjY4Ni05MTU0YWVhOGI3NjQscz1ZV1EzTm1FMFpXUXRaVEZqTkMwME9HVXlMV0ptTTJNdFptVXlPVE15WkROaU5UYzQsaT00MDk2
 
-(115) El cliente envía la contraseña:
+(115) El cliente **responde a la prueba**:
 
     XMPP Protocol
         RESPONSE [xmlns="urn:ietf:params:xml:ns:xmpp-sasl"]
@@ -111,7 +111,7 @@ A continuación (108), el cliente solicita una conexión XMPP enviando un paquet
             xmlns: urn:ietf:params:xml:ns:xmpp-sasl
             CDATA: Yz1iaXdzLHI9MjhJRUFBQUFBQUFibFNWYUFBQUFBQT09MTNjYzJiNGEtZTM2Ny00YTYwLWI2ODYtOTE1NGFlYThiNzY0LHA9b0NCb0FGUGZzMSt3cTZ1Q3FtcFVOL1liV3hvPQ==
 
-(117) El servidor confirma la identificación:
+(117) El servidor notifica el éxito del *handshake*, :
 
     XMPP Protocol
         SUCCESS [xmlns="urn:ietf:params:xml:ns:xmpp-sasl"]
@@ -121,7 +121,9 @@ A continuación (108), el cliente solicita una conexión XMPP enviando un paquet
                 [Group: Response]
             xmlns: urn:ietf:params:xml:ns:xmpp-sasl
             CDATA: dj1HVXBUdUdISnNQT1RtamVpTGFoS2Vkc0xPQjQ9
-            
+
+Una vez recibida la notificación de éxito, el cliente **tiene** que iniciar un nuevo *stream* sobre la conexión TCP existente enviando una nueva *cabecera stream inicial* al servidor.
+
 (118) Cliente a servidor:
 
     XMPP Protocol
@@ -145,6 +147,8 @@ A continuación (108), el cliente solicita una conexión XMPP enviando un paquet
                     [Severity level: Note]
                     [Group: Undecoded]
                     
+Cuando ha recibido la nueva *cabecera stream inicial* el servidor **tiene** que responder una nueva *cabecera response* para la que tiene que generar un nuevo *stream ID*.
+
 (119) Servidor a cliente:
 
     XMPP Protocol
