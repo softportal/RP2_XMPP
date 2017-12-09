@@ -147,7 +147,7 @@ Una vez recibida la notificación de éxito, el cliente **tiene** que iniciar un
                     [Severity level: Note]
                     [Group: Undecoded]
                     
-Cuando ha recibido la nueva *cabecera stream inicial* el servidor **tiene** que responder una nueva *cabecera response* para la que tiene que generar un nuevo *stream ID*.
+Cuando ha recibido la nueva *cabecera stream inicial* el servidor **tiene** que responder una nueva *cabecera stream* para la que **tiene** que generar un nuevo *stream ID*. También **tiene** que enviar las características del *stream*.
 
 (119) Servidor a cliente:
 
@@ -186,6 +186,8 @@ Cuando ha recibido la nueva *cabecera stream inicial* el servidor **tiene** que 
                     [Severity level: Note]
                     [Group: Undecoded]
 
+Después de identificarse con un servidor, un cliente **tiene** que vincularse un recurso específico del *stream* para que el servidor pueda direccionarlo correctamente. (**Tiene** que haber un recurso XMPP asociado al *JID* puro del cliente)
+
 (120) Cliente a servidor:
 
     XMPP Protocol
@@ -202,6 +204,8 @@ Cuando ha recibido la nueva *cabecera stream inicial* el servidor **tiene** que 
                         [Group: Undecoded]
         [Response In: 121]
 
+Cuando el servidor genera un recurso XMPP para el cliente, le envía un *IQ Stanza* de tipo *RESULT*, que **tiene** que incluir un elemento <jid/> con el JID completo para el recurso conectado como determina el servidor.
+
 (121) Servidor a cliente:
 
     XMPP Protocol
@@ -212,6 +216,8 @@ Cuando ha recibido la nueva *cabecera stream inicial* el servidor **tiene** que 
                 xmlns: urn:ietf:params:xml:ns:xmpp-bind
                 jid: sergio@ci40.xmpp.sergio.com/profanity
         [Request In: 120]
+        
+Una vez el cliente y el servidor han terminado la negociación *stream*, cualquiera de las partes puede enviar *XML stanzas*.
 
 (122) Cliente a servidor:
 
