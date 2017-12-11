@@ -165,6 +165,11 @@ int main(int argc, char **argv)
         return 1;
     }
 
+	FILE *fp = fopen("/tmp/temp", "ab+");
+	fclose(fp);
+
+	system("mosquitto_sub -h 192.168.1.91 -p 1883 -t 'topic1' >> /tmp/temp &");
+
     jid = argv[1];
     pass = argv[2];
 
@@ -202,6 +207,8 @@ int main(int argc, char **argv)
 
     /* final shutdown of the library */
     xmpp_shutdown();
+
+	system("kill -9 $(ps -ef | grep mosquitto_sub | head -n 1 | awk '{print $2}')");
 
     return 0;
 }
