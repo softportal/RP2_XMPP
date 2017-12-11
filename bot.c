@@ -22,6 +22,8 @@
 
 #include <strophe.h>
 
+#define TEMPFILE	((const unsigned char *)"/tmp/temp")
+
 
 int version_handler(xmpp_conn_t * const conn, xmpp_stanza_t * const stanza, void * const userdata)
 {
@@ -76,7 +78,10 @@ int message_handler(xmpp_conn_t * const conn, xmpp_stanza_t * const stanza, void
     xmpp_stanza_t *body, *reply;
     const char *type;
     char *intext, *replytext;
+	FILE *sync;
     int quit = 0;
+	char line[128]={0,}; // Initialize memory! You have to do this (as for your question)
+    char buf_temp[128];
 
     body = xmpp_stanza_get_child_by_name(stanza, "body");
     if (body == NULL)
@@ -97,9 +102,18 @@ int message_handler(xmpp_conn_t * const conn, xmpp_stanza_t * const stanza, void
         replytext = strdup("bye!");
         quit = 1;
     } else {
-        replytext = (char *) malloc(strlen(" to you too!") + strlen(intext) + 1);
+
+	    sync = fopen("/tmp/temp", "r");
+	    if( sync ) {
+	       while( fgets(line, 128, sync) !=NULL ) {}
+	       printf("Last line %s\n", line); //<this is just a log... you can remove it
+	       fclose(sync);
+	    }
+
+		sprintf(buf_temp, " %s",line);
+        replytext = (char *) malloc(128 + strlen(intext) + 1);
         strcpy(replytext, intext);
-        strcat(replytext, " to you too!");
+        strcat(replytext, buf_temp);
     }
     xmpp_free(ctx, intext);
     xmpp_message_set_body(reply, replytext);
