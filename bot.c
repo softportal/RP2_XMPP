@@ -20,6 +20,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
 #include <strophe.h>
 
 #define TEMPFILE	((const unsigned char *)"/tmp/temp")
@@ -174,11 +178,11 @@ int main(int argc, char **argv)
     pid_t pID = fork();
 	if (pID == 0)                // child
     {
-        FILE *fp = fopen("/tmp/temp", "ab+");
-        fclose(fp);
+        int fd = open("/tmp/temp", O_WRONLY|O_CREAT, 0666);
+        int cli = dup2(fd, 1);
+        close(fd);
 
-        //system("mosquitto_sub -h 192.168.1.91 -p 1883 -t 'topic1' >> /tmp/temp &");
-        execlp("ls","ls", "-l" ,"/home/semedi", (char *) NULL);
+        execlp("mosquitto_sub","mosquitto_sub","-h", "192.168.1.91","-p", "1883", "-t", "topic1",(char*) NULL);
     }
     else if (pID < 0)
     {
@@ -187,8 +191,6 @@ int main(int argc, char **argv)
     }
     else
     {           //main
-
-        while(1);
 
         jid = argv[1];
         pass = argv[2];
