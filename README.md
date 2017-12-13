@@ -543,3 +543,8 @@ Abrimos de nuevo el *stream* del cliente2 (1821,1823,1825,1827,1828 y 1830).
                 value: hola?
 
 Luego los paquetes eviados cuando un usuario ha cerrado su *stream* se pierden.
+
+
+**En esta práctica enviaremos por XMPP la temperatura (o cualquier otra magnitud) medida a través del Thermo 3 Click o el SensorTag. Dado que el servidor XMPP se encuentra en la Ci40, y el cliente XMPP estará en la máquina virtual, reutilizaremos el código de la práctica anterior para publicar por MQTT la magnitud física, ej. temperatura.**
+
+**Ejercicio: Analizar el tráfico con wireshark.**
