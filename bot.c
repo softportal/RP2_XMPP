@@ -159,56 +159,77 @@ int main(int argc, char **argv)
     xmpp_log_t *log;
     char *jid, *pass;
 
+    //**********************************************************************
+    // CLI PARSING
+    //************************************************************************
     /* take a jid and password on the command line */
     if (argc != 3) {
         fprintf(stderr, "Usage: bot <jid> <pass>\n\n");
         return 1;
     }
 
-	FILE *fp = fopen("/tmp/temp", "ab+");
-	fclose(fp);
+    //******************************************************************
 
-	system("mosquitto_sub -h 192.168.1.91 -p 1883 -t 'topic1' >> /tmp/temp &");
 
-    jid = argv[1];
-    pass = argv[2];
+    pid_t pID = fork();
+	if (pID == 0)                // child
+    {
+        FILE *fp = fopen("/tmp/temp", "ab+");
+        fclose(fp);
 
-    /* init library */
-    xmpp_initialize();
+        //system("mosquitto_sub -h 192.168.1.91 -p 1883 -t 'topic1' >> /tmp/temp &");
+        execlp("ls","ls", "-l" ,"/home/semedi", (char *) NULL);
+    }
+    else if (pID < 0)
+    {
+        printf("fork error!");
+        exit(1);
+    }
+    else
+    {           //main
 
-    /* create a context */
-    log = xmpp_get_default_logger(XMPP_LEVEL_DEBUG); /* pass NULL instead to silence output */
-    ctx = xmpp_ctx_new(NULL, log);
+        while(1);
 
-    /* create a connection */
-    conn = xmpp_conn_new(ctx);
+        jid = argv[1];
+        pass = argv[2];
 
-    /*
-     * also you can disable TLS support or force legacy SSL
-     * connection without STARTTLS
-     *
-     * see xmpp_conn_set_flags() or examples/basic.c
-     */
+        /* init library */
+        xmpp_initialize();
 
-    /* setup authentication information */
-    xmpp_conn_set_jid(conn, jid);
-    xmpp_conn_set_pass(conn, pass);
+        /* create a context */
+        log = xmpp_get_default_logger(XMPP_LEVEL_DEBUG); /* pass NULL instead to silence output */
+        ctx = xmpp_ctx_new(NULL, log);
 
-    /* initiate connection */
-    xmpp_connect_client(conn, NULL, 0, conn_handler, ctx);
+        /* create a connection */
+        conn = xmpp_conn_new(ctx);
 
-    /* enter the event loop - 
-       our connect handler will trigger an exit */
-    xmpp_run(ctx);
+        /*
+         * also you can disable TLS support or force legacy SSL
+         * connection without STARTTLS
+         *
+         * see xmpp_conn_set_flags() or examples/basic.c
+         */
 
-    /* release our connection and context */
-    xmpp_conn_release(conn);
-    xmpp_ctx_free(ctx);
+        /* setup authentication information */
+        xmpp_conn_set_jid(conn, jid);
+        xmpp_conn_set_pass(conn, pass);
 
-    /* final shutdown of the library */
-    xmpp_shutdown();
+        /* initiate connection */
+        xmpp_connect_client(conn, NULL, 0, conn_handler, ctx);
 
-	system("kill -9 $(ps -ef | grep mosquitto_sub | head -n 1 | awk '{print $2}')");
+        /* enter the event loop - 
+           our connect handler will trigger an exit */
+        xmpp_run(ctx);
+
+        /* release our connection and context */
+        xmpp_conn_release(conn);
+        xmpp_ctx_free(ctx);
+
+        /* final shutdown of the library */
+        xmpp_shutdown();
+
+        system("kill -9 $(ps -ef | grep mosquitto_sub | head -n 1 | awk '{print $2}')");
+    }
 
     return 0;
 }
