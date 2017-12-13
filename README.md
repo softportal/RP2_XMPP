@@ -2,7 +2,7 @@
 
 ## Alumnos
 
-Sergio Semedi Barranco
+Sergio Semedi Barranco  
 Lucas Segarra Fernández
 
 ## Memoria
