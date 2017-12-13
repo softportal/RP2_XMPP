@@ -587,6 +587,7 @@ Dicho bot se encuentra suscrito a las publicaciones desde la ci40 de un broker M
             to: sergio@ci40.xmpp.sergio.com/profanity
             type: chat
             BODY [value="ahora? 26.125"]
-            
+
+Recorte de wireshark aplicando el filtro *mqtt || xmpp*:
             
  ![Foto wireshark](https://github.com/softportal/RP2_XMPP/blob/master/screen.png?raw=true)
