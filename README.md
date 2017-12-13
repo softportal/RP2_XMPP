@@ -548,3 +548,42 @@ Luego los paquetes eviados cuando un usuario ha cerrado su *stream* se pierden.
 **En esta práctica enviaremos por XMPP la temperatura (o cualquier otra magnitud) medida a través del Thermo 3 Click o el SensorTag. Dado que el servidor XMPP se encuentra en la Ci40, y el cliente XMPP estará en la máquina virtual, reutilizaremos el código de la práctica anterior para publicar por MQTT la magnitud física, ej. temperatura.**
 
 **Ejercicio: Analizar el tráfico con wireshark.**
+
+El [siguiente enlace](https://github.com/softportal/Bin/blob/master/rp2_p2-out_update) es a la salida obtenida con la herramienta *tcpdump*.
+
+En dicho fichero, podemos observar la conexión XMPP de un cliente estando el bot ya conectado.
+
+Dicho bot se encuentra suscrito a las publicaciones desde la ci40 de un broker MQTT al *topic1* correspondiente a la temperatura detectada por el senso conectado a la placa y las almacena en un **fichero**
+
+(229) Recibimos desde el *broker* los paquetes MQTT con el dato de la temperatura:
+
+    MQ Telemetry Transport Protocol
+        Publish Message
+            0011 0000 = Header Flags: 0x30 (Publish Message)
+            Msg Len: 14
+            Topic: topic1
+            Message: 26.250
+
+ (253)Cada vez que el bot recibe cualquier mensaje XMPP (se entiende que preguntando por la temperatura)..
+
+    XMPP Protocol
+        MESSAGE [id="prof_msg_5" type="chat"]
+            from: sergio@ci40.xmpp.sergio.com/profanity
+            id: prof_msg_5
+            to: lucas@ci40.xmpp.sergio.com/3a65548f-4117-4aa9-bd92-d11e04abca28
+            type: chat
+            BODY [value="ahora?"]
+            REQUEST [xmlns="urn:xmpp:receipts"] [UNKNOWN]
+                xmlns: urn:xmpp:receipts
+                [Expert Info (Note/Undecoded): Unknown element: request]
+
+
+(256)..le responde al usuario que se lo ha enviado el valor (de la temperatura) almacenado en dicho fichero.
+
+    XMPP Protocol
+        MESSAGE [id="prof_msg_5" type="chat"]
+            from: lucas@ci40.xmpp.sergio.com/3a65548f-4117-4aa9-bd92-d11e04abca28
+            id: prof_msg_5
+            to: sergio@ci40.xmpp.sergio.com/profanity
+            type: chat
+            BODY [value="ahora? 26.125"]
